@@ -1,0 +1,15 @@
+# Whole-slide images are huge — never commit them
+data/*.svs
+data/*.tif
+data/*.tiff
+data/*.ndpi
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# macOS
+.DS_Store
