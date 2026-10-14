@@ -40,11 +40,33 @@ jupyter notebook classical_pipeline.ipynb     # or open it in VS Code and Run Al
   features each → weak-labeled Random Forest (728 training tiles, cellularity terciles).
 - Top features by importance: `mean_R` (0.35), `nuclei_density` (0.27), `ASM` (0.16) —
   colour and nuclear density dominate over the texture descriptors.
-- The resulting cellularity map **qualitatively agrees** with
+- The map looks similar by eye to
   [lazyslide-wsi-pipeline](https://github.com/koul00/lazyslide-wsi-pipeline)'s
-  zero-shot PLIP heatmap on the same slide — both flag the same dense region in
-  the lower-left lobe as tumour-like — though the classical map is coarser (grid
-  cells vs per-tile) and the agreement is visual, not pixel-registered.
+  zero-shot PLIP heatmap on the same slide (both mark a dense region in the
+  lower-left lobe), but **that visual impression is not supported quantitatively** —
+  see the next section.
+
+### Quantitative check against the expert annotation
+
+`evaluate_vs_xml.py` scores the same Random Forest map against CAMELYON16's
+`tumor_084.xml` (the RF is trained on weak labels only, never on the XML, so there
+is no leakage). Output: [`results/evaluation_vs_xml.txt`](results/evaluation_vs_xml.txt).
+
+| Tile counts as tumour if… | tumour tiles | RF ROC-AUC (95% CI) |
+|---|:---:|:---:|
+| its centroid is inside the annotation | 29 / 1103 | **0.521** (0.46–0.58) |
+| ≥ 25% of the tile overlaps it | 42 / 1103 | 0.578 (0.52–0.64) |
+| ≥ 5% of the tile overlaps it | 64 / 1103 | 0.618 (0.56–0.67) |
+
+For comparison, zero-shot PLIP reaches **0.946** on this slide. Only 1 of the 29
+tumour tiles is among the RF's top-10% highest-scoring tiles. The map therefore
+tracks **cellularity, not tumour**: in a lymph node, normal lymphoid tissue is also
+densely cellular, which is exactly the weakness of the terciles rule used for the
+weak labels.
+
+One exploratory lead (not corrected for multiple comparisons, one slide): the GLCM
+`correlation` feature alone separates tumour from non-tumour tiles with AUC 0.796
+(lower correlation = tumour). Worth re-testing on the 27-slide cohort.
 
 - **Every feature is hand-engineered** — no learned representations. This is the ceiling
   of classical digital pathology: stain unmixing, morphometry, and texture descriptors.

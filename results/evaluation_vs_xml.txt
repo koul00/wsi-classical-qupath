@@ -1,0 +1,22 @@
+slide: tumor_084.tif   level 2 (downsample 4), tile 256px = 232 um
+tissue tiles: 1103   (RF trained on 728 weak-labelled tiles)
+
+ROC-AUC of the RF probability vs the expert XML, tile level:
+  centroid inside tumor  tumor tiles  29/1103   AUC 0.521  95% CI [0.464, 0.579]   (nuclei_density alone: 0.474)
+  overlap >= 25%         tumor tiles  42/1103   AUC 0.578  95% CI [0.515, 0.641]   (nuclei_density alone: 0.530)
+  overlap >=  5%         tumor tiles  64/1103   AUC 0.618  95% CI [0.563, 0.667]   (nuclei_density alone: 0.582)
+
+Single features vs centroid-rule labels (AUC<0.5 means LOWER value = tumor):
+  contrast        0.548
+  homogeneity     0.369
+  energy          0.452
+  correlation     0.204
+  ASM             0.452
+  nuclei_density  0.474
+  mean_R          0.485
+  mean_G          0.440
+  mean_B          0.506
+
+Tumor tiles among the RF top-10% (110 tiles): 1 of 29
+Reference: zero-shot PLIP on the same slide, AUC 0.946 (lazyslide-wsi-pipeline).
+Caveat: ONE slide, few tumor tiles -> exploratory; single-feature AUCs are not corrected for multiple comparisons.
