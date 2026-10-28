@@ -1,0 +1,18 @@
+# QuPath projects hold absolute paths and large per-image data; recreate locally
+*.qpproj
+*.qpproj.backup
+data/
+
+# Per-cell feature tables (up to ~1 GB per slide); regenerate with scripts/classical_features.groovy
+results/
+results_*/
+*.tsv
+
+# Whole-slide images
+*.svs
+*.tif
+*.tiff
+*.ndpi
+
+# macOS
+.DS_Store
