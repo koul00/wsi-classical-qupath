@@ -1,16 +1,11 @@
-# wsi-classical-qupath — classical cell features computed with QuPath
+# wsi-classical-qupath: classical cell features computed with QuPath
 
-Handcrafted, pathologist-readable cell features for whole-slide H&E images, computed with
-**QuPath's own commands** (cell detection, intensity/Haralick texture, shape, neighbourhood
-features) through its scripting engine. Nothing is reimplemented: the Groovy script tells
-QuPath what to run, and QuPath produces the numbers.
+Handcrafted,  cell features for whole-slide H&E images, computed with
+**QuPath** (cell detection, intensity/Haralick texture, shape, neighbourhood
+features) through its scripting engine. 
 
 Requires [QuPath](https://qupath.github.io) **0.7.0** (Bankhead et al., *Sci. Rep.* 2017).
 QuPath's source is not included here; see <https://github.com/qupath/qupath> and its licence.
-
-A separate Python reimplementation of the same kind of pipeline (scikit-image) is in
-[wsi-classical-python](https://github.com/koul00/wsi-classical-python). Its results are
-not QuPath's results.
 
 ## What the script does (`scripts/classical_features.groovy`)
 
@@ -51,11 +46,6 @@ Output: `<project>/<results>/<image>_cell_features.tsv`. The tables are large an
 | Region | ~1.2 × 1.15 mm hand-drawn annotation (1.39 mm²) | 16,707 | ~17 s | ~1.7 GB |
 | Whole tissue | 103.5 mm² outline (`annotations/tumor_084.tif.geojson`) | 667,332 | 12.5 min | ~10 GB RAM, 1.0 GB TSV |
 
-Measured on a 10-core Apple-silicon Mac with 26 GB RAM. The GUI run and a headless rerun
-gave identical values (all numeric columns), and the same area inside the whole-tissue run
-has matching medians (nuclear area 15.8 vs 15.7 µm², hematoxylin OD mean 0.83 vs 0.83).
-The tissue outline was exported from LazySlide's tissue mask so that other methods can
-analyse the same tissue.
 
 `scripts/make_feature_figures.py` (Python, separate from QuPath) plots a feature table:
 histograms for quality checks and morphology, a correlation heatmap and spatial maps; see
